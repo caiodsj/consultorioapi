@@ -32,14 +32,14 @@ namespace ConsultorioAPI.Controllers
         {
             var consulta = await _consultaService.DeleteConsultaAsync(id);
             if (consulta is null) return NotFound("Consulta não encontrada");
-            return Ok();
+            return Ok(consulta);
         }
 
         [HttpPost]
         public async Task<ActionResult<Consulta>> CreateConsulta(ConsultaDTO request)
         {
-            await _consultaService.CreateConsultaAsync(request);
-            return Ok();
+            var consulta = await _consultaService.CreateConsultaAsync(request);
+            return Ok(consulta);
         }
     }
 }
