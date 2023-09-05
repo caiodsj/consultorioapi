@@ -21,7 +21,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddScoped<IMedicoInterface, MedicoService>();
+builder.Services.AddScoped<IMedicoService, MedicoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
 builder.Services.AddScoped<IConsultaService, ConsultaService>();
 
