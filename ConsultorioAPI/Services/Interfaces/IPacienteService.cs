@@ -2,7 +2,7 @@
 {
     public interface IPacienteService
     {
-        Task<List<Consulta>> GetAllConsultasByPacienteAsync(int id);
+        Task<object> GetAllConsultasByPacienteAsync(int id);
         Task<List<Paciente>> GetAllPacienteMaiorQueAsync(int idade);
         Task<string> UpdatePacienteAsync(int id, PacienteDTO request);
         Task<string> CreatePacienteAsync(CreatePacienteDTO request);

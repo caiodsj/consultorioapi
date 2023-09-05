@@ -29,9 +29,11 @@ namespace ConsultorioAPI.Services
             return "Paciente criado com sucesso";
         }
 
-        public async Task<List<Consulta>> GetAllConsultasByPacienteAsync(int id)
+        public async Task<object> GetAllConsultasByPacienteAsync(int id)
         {
-            return await _context.Consultas.Where(c => c.IdPaciente == id).ToListAsync();
+            var consultas = await _context.Consultas.Where(c => c.IdPaciente == id).ToListAsync();
+            if (consultas.Count == 0) return "O paciente não possui consultas marcadas.";
+            return consultas;
 
         }
 

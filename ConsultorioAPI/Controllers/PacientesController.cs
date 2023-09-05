@@ -15,11 +15,11 @@ namespace ConsultorioAPI.Controllers
         }
 
         [HttpGet("{id}/consultas")]
-        public async Task<ActionResult<IEnumerable<Consulta>>> GetAllConsultasById(int id)
+        public async Task<ActionResult<object>> GetAllConsultasById(int id)
         {
-            var consultas = _pacienteService.GetAllConsultasByPacienteAsync(id);
+            var consultas = await _pacienteService.GetAllConsultasByPacienteAsync(id);
             if (consultas is null) return NotFound($"Paciente com ID {id} não encontrado.");
-            return Ok();
+            return Ok(consultas);
         }
 
         [HttpGet("/pacientes")]
@@ -52,13 +52,13 @@ namespace ConsultorioAPI.Controllers
         {
             var paciente = await _pacienteService.UpdatePacienteAsync(id, request);
             if (paciente is null) return NotFound($"Paciente com ID {id} não encontrado.");
-            return Ok();
+            return Ok(paciente);
         }
         [HttpPost]
         public async Task<ActionResult> CreatePaciente(CreatePacienteDTO paciente)
         {
-            await _pacienteService.CreatePacienteAsync(paciente);
-            return Ok();
+            var mensagem = await _pacienteService.CreatePacienteAsync(paciente);
+            return Ok(mensagem);
         }
     }
 }
