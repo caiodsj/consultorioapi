@@ -12,16 +12,40 @@ namespace ConsultorioAPI.Services
             _context = context;
         }
 
+        public async Task<List<MedicoDTO>> GetAllMedicos()
+        {
+            var medicos = await _context.Medicos.Include(p => p.Pacientes).ToListAsync();
+            List<MedicoDTO> medicoDTOs = new List<MedicoDTO>();
+            foreach(var medico in medicos)
+            {
+                medicoDTOs.Add(MedicoMapper.ModelToDTO(medico,_context));
+            }
+            
+            return medicoDTOs;
+            
+        }
+
         public async Task<List<Consulta>> GetConsultasByMedico(int medicoID)
         {
-            return await _context.Consultas.Where(c => c.IdMedico == medicoID).ToListAsync();
+            return await _context.Consultas.Where(c => c.IdMedico == medicoID).Include(p => p.Paciente).ToListAsync();
         }
 
         public async Task<List<MedicoDTO>> GetMedicoByEspecialidade(string especialidade)
         {
-            return await _context.Medicos.Where(m => m.Especialidade.ToLower() == especialidade.ToLower()).Include(p => p.Pacientes)
-                .Select(m => MedicoMapper.ModelToDTO(m)).ToListAsync();
+            var lista = await _context.Medicos.Where(m => m.Especialidade.ToLower() == especialidade.ToLower()).Include(p => p.Pacientes)
+               .ToListAsync();
+
+            List<MedicoDTO> medicoDTOs = new List<MedicoDTO>();
+
+            foreach(var m in lista)
+            {
+                medicoDTOs.Add(MedicoMapper.ModelToDTO(m, _context));
+            }
+
+            return medicoDTOs;
         }
+
+
 
         public async Task<int?> CreateMedico(CreateMedicoDTO medico)
         {
@@ -56,6 +80,31 @@ namespace ConsultorioAPI.Services
                 await _context.SaveChangesAsync();
                 return 1;
             }
+        }
+
+        public async Task<List<MedicoDTO>> GetMedicoDisponivel(string data, string especialidade)
+        {
+            var medicos = await _context.Medicos.Where(e => e.Especialidade.ToLower() == especialidade.ToLower()).ToListAsync();
+            var medicosDisponiveis = new List<MedicoDTO>();
+            var consultasDiarias = await _context.Consultas.Where(d => d.DataConsulta == DateTime.Parse(data)).ToListAsync();
+            
+            foreach(var medico in medicos)
+            {
+                int consultas = 0;
+                foreach(var consulta in consultasDiarias)
+                {
+                    if(consulta.IdMedico == medico.Id)
+                    {
+                        consultas++;
+                    }
+                }
+                if(consultas < 3)
+                {
+                    medicosDisponiveis.Add(MedicoMapper.ModelToDTO(medico,_context));
+                }
+            }
+
+            return medicosDisponiveis;
         }
     }
 }

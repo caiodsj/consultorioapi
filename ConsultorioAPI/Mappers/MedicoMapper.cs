@@ -5,7 +5,8 @@ namespace ConsultorioAPI.Mappers
 {
     public class MedicoMapper
     {
-        public static MedicoDTO ModelToDTO(Medico medico)
+
+        public static  MedicoDTO ModelToDTO(Medico medico, DataContext _context)
         {
             MedicoDTO medicoDTO = new MedicoDTO()
             {
@@ -19,9 +20,15 @@ namespace ConsultorioAPI.Mappers
                 Telefone = medico.Telefone,
 
             };
-            foreach (var paciente in medico.Pacientes)
+
+            var paciente = _context.Consultas.ToList();
+            
+            foreach (var p in paciente)
             {
-                medicoDTO.Pacientes.Add(paciente.Nome);
+               if(p.IdMedico == medicoDTO.Id)
+                {
+                    medicoDTO.Pacientes.Add(_context.Pacientes.Find(p.IdPaciente).Nome);
+                }
             }
             return medicoDTO;
         }

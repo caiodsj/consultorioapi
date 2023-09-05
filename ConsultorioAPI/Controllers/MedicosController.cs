@@ -14,6 +14,27 @@ namespace ConsultorioAPI.Controllers
             _medicoService = medicoService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllMedicos()
+        {
+            List<MedicoDTO> list = await _medicoService.GetAllMedicos();
+            if (!list.Any()) return NotFound("Não há nenhum médico");
+
+            return Ok(list);
+
+        }
+
+        [HttpGet("medicos/disponiveis")]
+        public async Task<ActionResult<List<MedicoDTO>>> GetMedicosDisponiveis([FromQuery] string date, [FromQuery] string especialidade)
+        {
+            List<MedicoDTO> medicos = await _medicoService.GetMedicoDisponivel(date, especialidade);
+
+            if (!medicos.Any()) return Ok("Não há médicos disponiveis");
+
+            return Ok(medicos);
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Consulta>>> GetConsultaByMedico(int id)
         {
@@ -23,8 +44,8 @@ namespace ConsultorioAPI.Controllers
             return Ok(list);
         }
 
-        [HttpGet("especilaidade={especialidade}")]
-        public async Task<ActionResult<List<MedicoDTO>>> GetMedicoByEspecialidade(string especialidade)
+        [HttpGet("medicos/")]
+        public async Task<ActionResult<List<MedicoDTO>>> GetMedicoByEspecialidade([FromQuery] string especialidade)
         {
             List<MedicoDTO> medicos = await _medicoService.GetMedicoByEspecialidade(especialidade);
             if (!medicos.Any()) return NotFound("Nenhum médico com essa especialidade encontrado");
