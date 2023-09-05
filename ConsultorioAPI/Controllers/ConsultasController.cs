@@ -41,5 +41,15 @@ namespace ConsultorioAPI.Controllers
             var consulta = await _consultaService.CreateConsultaAsync(request);
             return Ok(consulta);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Consulta>> UpdateConsulta(int id, ConsultaDTO request)
+        {
+            var consulta = await _consultaService.UpdateConsultaAsync(id, request);
+            if (consulta is null) return NotFound("Consulta não encontrada");
+            return Ok(consulta);
+
+        }
+
     }
 }

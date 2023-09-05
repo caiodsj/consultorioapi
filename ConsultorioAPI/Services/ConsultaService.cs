@@ -40,5 +40,19 @@ namespace ConsultorioAPI.Services
         {
             return await _context.Consultas.Where(c => c.DataConsulta.Date == data.Date).ToListAsync();
         }
+
+        public async Task<string> UpdateConsultaAsync(int id, ConsultaDTO request)
+        {
+            var consulta = await _context.Consultas.FindAsync(id);
+            if (consulta is null) return null;
+            consulta.DataConsulta = request.DataConsulta;
+            consulta.Descricao = request.Descricao;
+            consulta.PrescricaoMedica = request.PrescricaoMedica;
+            consulta.ValorConsulta = request.ValorConsulta;
+            consulta.IdMedico = request.IdMedico;
+            consulta.IdPaciente = request.IdPaciente;
+            await _context.SaveChangesAsync();
+            return "Consulta atualizada com sucesso";
+        }
     }
 }

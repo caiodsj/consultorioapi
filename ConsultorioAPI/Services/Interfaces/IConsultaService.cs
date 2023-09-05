@@ -7,5 +7,6 @@ namespace ConsultorioAPI.Services.Interfaces
         Task<Consulta> CreateConsultaAsync(ConsultaDTO consulta);
         Task<string> DeleteConsultaAsync(int id);
         Task<List<Consulta>> GetConsultasPorData(DateTime data);
+        Task<string> UpdateConsultaAsync(int id, ConsultaDTO request);
     }
 }

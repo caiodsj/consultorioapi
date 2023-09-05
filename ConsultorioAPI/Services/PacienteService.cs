@@ -1,5 +1,6 @@
 ﻿
 using ConsultorioAPI.Data;
+using ConsultorioAPI.Models;
 
 namespace ConsultorioAPI.Services
 {
@@ -31,11 +32,21 @@ namespace ConsultorioAPI.Services
 
         public async Task<object> GetAllConsultasByPacienteAsync(int id)
         {
-            var consultas = await _context.Consultas.Where(c => c.IdPaciente == id).ToListAsync();
-            if (consultas.Count == 0) return "O paciente não possui consultas marcadas.";
-            return consultas;
+            var dataAtual = DateTime.UtcNow.Date;
 
+            var consultas = await _context.Consultas
+                .Where(c => c.IdPaciente == id && c.DataConsulta >= dataAtual)
+                .OrderBy(c => c.DataConsulta)
+                .ToListAsync();
+
+            if (consultas.Count == 0)
+            {
+                return "O paciente não possui consultas marcadas a partir da data atual.";
+            }
+
+            return consultas;
         }
+
 
         public async Task<List<Paciente>> GetAllPacienteMaiorQueAsync(int idade)
         {
@@ -43,6 +54,14 @@ namespace ConsultorioAPI.Services
             return await _context.Pacientes.Where(p => p.DataNascimento <= dataComparacao).ToListAsync();
         }
 
+        public async Task<List<Consulta>> GetHistoricoMedicoAsync(int id)
+        {
+            var historico = await _context.Consultas
+                .Where(c => c.IdPaciente == id)
+                .OrderBy(c => c.DataConsulta)
+                .ToListAsync();
+            return historico;
+        }
 
         public async Task<string> UpdateEnderecoAsync(int id, string endereco)
         {

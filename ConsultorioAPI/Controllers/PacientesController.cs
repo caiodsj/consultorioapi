@@ -34,6 +34,18 @@ namespace ConsultorioAPI.Controllers
 
             return Ok(pacientes);
         }
+        [HttpGet("{id}/historico")]
+        public async Task<ActionResult<List<Consulta>>> GetHistoricoMedico(int id)
+        {
+            var paciente = await _pacienteService.GetHistoricoMedicoAsync(id);
+
+            if (paciente == null || paciente.Count == 0)
+            {
+                return NotFound($"Paciente com ID {id} não encontrado ou não possui histórico médico.");
+            }
+
+            return Ok(paciente);
+        }
 
         [HttpPatch("/pacientes/{id}")]
         public async Task<IActionResult> AtualizarEndereco(int id, [FromBody] PacienteEnderecoDTO atualizacaoEndereco)
