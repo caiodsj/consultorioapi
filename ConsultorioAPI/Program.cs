@@ -1,4 +1,6 @@
 global using Microsoft.EntityFrameworkCore;
+global using ConsultorioAPI.DTOs;
+global using ConsultorioAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
