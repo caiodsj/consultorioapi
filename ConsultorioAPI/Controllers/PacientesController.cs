@@ -36,7 +36,7 @@ namespace ConsultorioAPI.Controllers
         }
 
         [HttpPatch("/pacientes/{id}")]
-        public async Task<IActionResult> AtualizarEndereco(int id, [FromBody] PacienteDTO atualizacaoEndereco)
+        public async Task<IActionResult> AtualizarEndereco(int id, [FromBody] PacienteEnderecoDTO atualizacaoEndereco)
         {
             var mensagem = await _pacienteService.UpdateEnderecoAsync(id, atualizacaoEndereco.Endereco);
 
