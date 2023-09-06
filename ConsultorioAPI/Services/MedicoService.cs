@@ -82,11 +82,11 @@ namespace ConsultorioAPI.Services
             }
         }
 
-        public async Task<List<MedicoDTO>> GetMedicoDisponivel(string data, string especialidade)
+        public async Task<List<MedicoDTO>> GetMedicoDisponivel(DateTime data, string especialidade)
         {
             var medicos = await _context.Medicos.Where(e => e.Especialidade.ToLower() == especialidade.ToLower()).ToListAsync();
             var medicosDisponiveis = new List<MedicoDTO>();
-            var consultasDiarias = await _context.Consultas.Where(d => d.DataConsulta == DateTime.Parse(data)).ToListAsync();
+            var consultasDiarias = await _context.Consultas.Where(d => d.DataConsulta.Date == data.Date).ToListAsync();
             
             foreach(var medico in medicos)
             {

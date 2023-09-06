@@ -25,7 +25,7 @@ namespace ConsultorioAPI.Controllers
         }
 
         [HttpGet("medicos/disponiveis")]
-        public async Task<ActionResult<List<MedicoDTO>>> GetMedicosDisponiveis([FromQuery] string date, [FromQuery] string especialidade)
+        public async Task<ActionResult<List<MedicoDTO>>> GetMedicosDisponiveis([FromQuery] DateTime date, [FromQuery] string especialidade)
         {
             List<MedicoDTO> medicos = await _medicoService.GetMedicoDisponivel(date, especialidade);
 

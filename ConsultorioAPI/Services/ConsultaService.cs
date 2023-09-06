@@ -38,7 +38,7 @@ namespace ConsultorioAPI.Services
 
         public async Task<List<Consulta>> GetConsultasPorData(DateTime data)
         {
-            return await _context.Consultas.Where(c => c.DataConsulta.Date == data.Date).ToListAsync();
+            return await _context.Consultas.Where(c => c.DataConsulta.Date == data.Date).Include(m => m.Medico).Include(p => p.Paciente).ToListAsync();
         }
 
         public async Task<string> UpdateConsultaAsync(int id, ConsultaDTO request)

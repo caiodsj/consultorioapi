@@ -37,6 +37,7 @@ namespace ConsultorioAPI.Services
             var consultas = await _context.Consultas
                 .Where(c => c.IdPaciente == id && c.DataConsulta >= dataAtual)
                 .OrderBy(c => c.DataConsulta)
+                .Include(m => m.Medico)
                 .ToListAsync();
 
             if (consultas.Count == 0)
@@ -58,6 +59,7 @@ namespace ConsultorioAPI.Services
         {
             var historico = await _context.Consultas
                 .Where(c => c.IdPaciente == id)
+                .Include(m => m.Medico)
                 .OrderBy(c => c.DataConsulta)
                 .ToListAsync();
             return historico;
